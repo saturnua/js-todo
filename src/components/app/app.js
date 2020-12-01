@@ -19,6 +19,7 @@ export default class App extends Component {
             this.createTodoItem('Have a lunch')
         ],
         search: "",
+        status: "all"
     };
 
     createTodoItem(label) {
@@ -97,9 +98,15 @@ export default class App extends Component {
         this.setState({search: e.target.value})
     }
 
+    handleStatus = (e) => {
+        this.setState({status: e.target.id})
+    }
+
     render() {
-        const {search, todoData} = this.state;
-        const { handlerSearch } = this
+        console.log(this.state)
+        const {search, todoData, status} = this.state;
+        const {handlerSearch} = this
+        const {handleStatus} = this
         const doneCount = todoData
             .filter((el) => el.done).length;
         const todoCount = todoData.length - doneCount;
@@ -109,10 +116,11 @@ export default class App extends Component {
                 <AppHeader toDo={todoCount} done={doneCount}/>
                 <div className="top-panel d-flex">
                     <SearchPanel searchData={search} onChange={handlerSearch}/>
-                    <ItemStatusFilter/>
+                    <ItemStatusFilter onChange={handleStatus} status={status}/>
                 </div>
 
                 <TodoList
+                    status={status}
                     todos={todoData}
                     searchData={search}
                     onDeleted={this.deleteItem}
